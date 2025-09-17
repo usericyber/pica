@@ -3,21 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SwiftSave - Get Paid Early, Save Automatically</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1a2a40;
+        }
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            padding: 80px 20px;
+            background-color: #1a2a40;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content {
+            flex: 1;
+            z-index: 1;
+        }
+        .hero-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+        .hero-content p {
+            font-size: 1.2em;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+        .hero-cta {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .hero-cta:hover {
+            background-color: #0056b3;
+        }
+        .hero-image-placeholder {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            height: 350px;
+            margin-left: 50px;
+            border-radius: 10px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .features h2 {
+            font-size: 2.5em;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-item {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+        .feature-item h3 {
+            margin-top: 0;
+            color: #1a2a40;
+        }
+
+        /* Proof Points Section */
+        .proof-points {
+            background-color: #e3edf7;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .proof-points-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .proof-point {
+            flex-basis: 250px;
+            margin: 20px;
+            text-align: center;
+        }
+        .proof-point h3 {
+            font-size: 2.5em;
+            color: #1a2a40;
+            margin-bottom: 5px;
+        }
+        .testimonial-item {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+        .testimonial-item p {
+            font-style: italic;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .pricing-plan {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .pricing-plan.premium {
+            background-color: #1a2a40;
+            color: #fff;
+            border-color: #007bff;
+        }
+        .pricing-plan h3 {
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        .pricing-plan .price {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .pricing-plan .price span {
+            font-size: 0.5em;
+            font-weight: normal;
+        }
+        .pricing-plan ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .pricing-plan li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .pricing-plan li::before {
+            content: '✓';
+            color: #007bff;
+            margin-right: 10px;
+        }
+        .pricing-plan.premium li::before {
+            color: #fff;
+        }
+        .plan-cta {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .plan-cta.basic-cta {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .plan-cta.premium-cta {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Call to Action Section */
+        .cta-footer {
+            background-color: #1a2a40;
+            color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .cta-footer h2 {
+            font-size: 2.5em;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Generate an Image</h1>
-        <form id="image-form">
-            <input type="text" id="prompt-input" placeholder="Enter your prompt here..." required>
-            <button type="submit" id="generate-btn">Generate</button>
-        </form>
-        <div id="result-container">
-            <div id="loading" class="hidden">Generating...</div>
-            <img id="generated-image" class="hidden" alt="Generated Image">
+
+    <header>
+        <div class="logo">SwiftSave</div>
+        <nav class="nav-links">
+            <a href="#">Products</a>
+            <a href="#">Customers</a>
+            <a href="#">Pricing</a>
+            <a href="#">Blog</a>
+        </nav>
+        <div>
+            <a href="#" style="margin-right: 10px;">Log in</a>
+            <a href="#" class="hero-cta">Sign Up</a>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Get paid early, save automatically.</h1>
+                <p>SwiftSave helps you access your paycheck days sooner and puts your savings on autopilot, so you can focus on what matters.</p>
+                <a href="#" class="hero-cta">Get Started Today</a>
+            </div>
+            <div class="hero-image-placeholder"></div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <div class="features">
+        <div class="container">
+            <h2>Experience that grows with your scale.</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Early Access</h3>
+                    <p>Access up to two days earlier than traditional banks. We work with your employer to get your money to you faster.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Automated Savings</h3>
+                    <p>Set a percentage of each paycheck to be automatically transferred to your high-yield savings account. It's effortless.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Unmatched Security</h3>
+                    <p>Your funds are FDIC-insured, and your data is protected with bank-level encryption. Your financial safety is our top priority.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="proof-points">
+        <div class="container">
+            <h2>Trusted by innovative companies.</h2>
+            <div class="proof-points-grid">
+                <div class="proof-point">
+                    <h3>24%</h3>
+                    <p>Average savings increase for our users.</p>
+                </div>
+                <div class="proof-point">
+                    <h3>180k+</h3>
+                    <p>Businesses already using SwiftSave.</p>
+                </div>
+                <div class="proof-point">
+                    <h3>10+</h3>
+                    <p>Months of financial freedom for our users.</p>
+                </div>
+            </div>
+            <div class="testimonial-item">
+                <p>"SwiftSave changed my financial life. I've saved more in the last six months than I have in the last two years, and I don't even think about it anymore."</p>
+                <p>- Jane Doe, CEO of Innovate Corp.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="pricing">
+        <div class="container">
+            <h2>Choose the plan that's right for you.</h2>
+            <div class="pricing-grid">
+                <div class="pricing-plan">
+                    <h3>Plus</h3>
+                    <p class="price">$2.99<span>/month</span></p>
+                    <ul>
+                        <li>✓ Early paycheck access</li>
+                        <li>✓ Automated savings</li>
+                        <li>✓ Standard security features</li>
+                        <li>✓ Basic financial insights</li>
+                    </ul>
+                    <a href="#" class="plan-cta basic-cta">Choose Plan</a>
+                </div>
+                <div class="pricing-plan premium">
+                    <h3>Premium</h3>
+                    <p class="price">$9.99<span>/month</span></p>
+                    <ul>
+                        <li>✓ All Plus features</li>
+                        <li>✓ High-yield savings account</li>
+                        <li>✓ Personalized financial advisor</li>
+                        <li>✓ Advanced investment options</li>
+                    </ul>
+                    <a href="#" class="plan-cta premium-cta">Choose Plan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-footer">
+        <div class="container">
+            <h2>Ready to level up your finances?</h2>
+            <a href="#" class="hero-cta">Sign Up for Free</a>
+        </div>
+    </div>
+
+    <script>
+        console.log("SwiftSave landing page loaded successfully!");
+    </script>
 </body>
 </html>
