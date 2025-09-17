@@ -1,3 +1,4 @@
+const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
 const API_URL = "https://backend.craiyon.com/generate";
 
 const form = document.getElementById('image-form');
@@ -21,7 +22,7 @@ form.addEventListener('submit', async (e) => {
     generateBtn.disabled = true;
 
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(PROXY_URL + API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
