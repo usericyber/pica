@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>মেয়েদের জান্নাতের যাওয়ার জন্য ৫টি কাজ | ইন্টারেক্টিভ প্রেজেন্টেশন</title>
+    <title>জান্নাতের সহজ পথ | মেয়েদের জন্য ৫টি কাজ</title>
     <style>
         /* --- CSS: স্টাইল ও ডিজাইন --- */
         :root {
@@ -64,7 +64,7 @@
             z-index: 1;
         }
 
-        /* বাম দিক: ভিডিও প্লেসহোল্ডার - **এখানে আপনার ভিডিও প্লে হবে** */
+        /* বাম দিক: ভিডিও প্লেসহোল্ডার */
         .video-area {
             flex: 3;
             background-color: rgba(0, 0, 0, 0.6);
@@ -77,13 +77,27 @@
         .video-placeholder {
             width: 100%;
             height: 100%;
-            background: url('video_placeholder.jpg') no-repeat center center / cover;
+            /* Note: Background image is now dynamic via JS for visual cue */
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 2em;
-            color: var(--primary-color);
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #ddd;
             text-shadow: 0 0 5px #000;
+        }
+        .visual-suggestion-text {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
         }
 
         /* ডান দিক: টেক্সট ও স্লাইড এলাকা */
@@ -130,38 +144,7 @@
             to { transform: scale(1.05); opacity: 0.9; }
         }
 
-        /* নেভিগেশন বাটন */
-        .navigation-controls {
-            display: flex;
-            justify-content: flex-end; /* শুধুমাত্র ডানদিকে বাটন দেখাবে */
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s, transform 0.1s;
-            font-weight: bold;
-        }
-
-        .nav-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .nav-button:disabled {
-            background-color: #343a40;
-            cursor: not-allowed;
-            opacity: 0.6;
-            transform: none;
-        }
+        /* Removed all navigation-related CSS */
 
         /* রেসপন্সিভনেস */
         @media (max-width: 1000px) {
@@ -178,26 +161,23 @@
     <div class="presentation-container">
         
         <div class="video-area">
-            <div class="video-placeholder">
-                এখানে আপনার ভিডিও প্লেয়ার বা ভিডিও কভার যোগ করুন
+            <div class="video-placeholder" id="videoPlaceholder">
+                ভিডিও ফুটেজ এখানে প্রদর্শিত হবে।
+                <div class="visual-suggestion-text" id="visualSuggestion"></div>
             </div>
         </div>
 
         <div class="slide-area">
-            <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 20px;">জান্নাতের সহজ পথ</h2>
-            
             <div class="slide-content" id="slideContent">
                 <div class="emoji-tab" id="emojiTab">🌟</div>
                 <div class="slide-text" id="typingText"></div>
             </div>
 
-            <div class="navigation-controls">
-                <button class="nav-button" id="nextBtn">পরবর্তী (বা Enter চাপুন)</button>
             </div>
-        </div>
     </div>
 
     <script>
+        // Data Structure for Slides: text, emoji, and visual suggestion
         const slides = [
             { text: "আসসালামু আলাইকুম! 🌸\n\nআশা করি আল্লাহর রহমতে সবাই ভালো আছেন।", emoji: "🌸", visual: "শান্ত একটি নেচার ব্যাকগ্রাউন্ড, সূর্যোদয় বা ফুলের ছবি। (Stock: Sunrise over a garden, soft light.)" },
             { text: "আজ আমরা মেয়েদের জন্য জান্নাতে যাওয়ার ৫টি সহজ কিন্তু গুরুত্বপূর্ণ কাজ নিয়ে আলোচনা করব। ✨", emoji: "✨", visual: "মুসলিম মহিলাদের শান্তিপূর্ণ ব্যাকগ্রাউন্ড। (Stock: Muslim woman smiling with nature background.)" },
@@ -225,12 +205,11 @@
         let isTyping = false;
         const typingTextElement = document.getElementById('typingText');
         const emojiTabElement = document.getElementById('emojiTab');
-        const nextBtn = document.getElementById('nextBtn');
+        const visualSuggestionElement = document.getElementById('visualSuggestion');
         
         // টাইপিং অ্যানিমেশন ফাংশন
         function typeWriter(text, i, fnCallback) {
             isTyping = true;
-            nextBtn.disabled = true; // টাইপিং চলাকালীন বাটন ডিসেবল থাকবে
             
             if (i < text.length) {
                 typingTextElement.innerHTML = text.substring(0, i + 1).replace(/\n/g, '<br>'); // Newline support
@@ -240,14 +219,13 @@
             } else if (typeof fnCallback == 'function') {
                 typingTextElement.innerHTML = text.replace(/\n/g, '<br>');
                 isTyping = false;
-                nextBtn.disabled = currentSlide === slides.length - 1; // শেষ স্লাইড হলে বাটন ডিসেবল
                 setTimeout(fnCallback, 700);
             }
         }
 
         // স্লাইড পরিবর্তন ফাংশন
         function changeSlide(index) {
-            if (index < 0 || index >= slides.length || isTyping) return;
+            if (index < 0 || index >= slides.length) return; // Presentation finished
 
             currentSlide = index;
             const slide = slides[currentSlide];
@@ -258,28 +236,26 @@
             setTimeout(() => {
                 typingTextElement.innerHTML = ''; 
                 
+                // Update Emoji and Animation
                 emojiTabElement.textContent = slide.emoji;
                 emojiTabElement.classList.add('animated');
                 setTimeout(() => emojiTabElement.classList.remove('animated'), 1500);
 
+                // Update Visual Suggestion in the video area
+                visualSuggestionElement.innerHTML = "ফুটেজ: " + slide.visual;
+
+                // Start Typing
                 typeWriter(slide.text, 0, function() {
-                    // টাইপিং শেষ
+                    // Automatically proceed to the next slide after typing is finished
+                    // 4 seconds delay to allow time for reading/video synchronization
+                    setTimeout(() => {
+                        changeSlide(currentSlide + 1);
+                    }, 4000); 
                 });
 
                 slideContent.style.opacity = 1;
             }, 300);
         }
-
-        // নেভিগেশন ইভেন্ট লিসেনার
-        nextBtn.addEventListener('click', () => changeSlide(currentSlide + 1));
-        
-        // এন্টার (Enter) কী চাপলে স্লাইড পরিবর্তনের জন্য লিসেনার
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' && !nextBtn.disabled && !isTyping) {
-                event.preventDefault(); // ফর্ম সাবমিট হওয়া আটকানো
-                changeSlide(currentSlide + 1);
-            }
-        });
 
         // প্রথম স্লাইড লোড করা
         changeSlide(0);
