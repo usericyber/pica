@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>৫টি কাজ জান্নাতের জন্য</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Bengali', sans-serif;
+    }
+
+    body {
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .slider {
+      width: 100%;
+      max-width: 1280px;
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      background: #ffffff;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.8s ease, opacity 0.8s ease;
+      transform: rotateY(90deg);
+      opacity: 0;
+    }
+
+    .slide.active {
+      transform: rotateY(0deg);
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .left {
+      font-size: 80px;
+      width: 30%;
+      text-align: center;
+    }
+
+    .right {
+      width: 65%;
+      font-size: 36px;
+      color: #333;
+      animation: fadeInRight 1s ease forwards;
+    }
+
+    @keyframes fadeInRight {
+      0% {
+        transform: translateX(50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .next-btn {
+      position: absolute;
+      bottom: 30px;
+      right: 40px;
+      padding: 14px 30px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .next-btn:hover {
+      background-color: #357ABD;
+    }
+
+    @media (max-width: 768px) {
+      .right {
+        font-size: 24px;
+      }
+
+      .left {
+        font-size: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="slider" id="slider">
+  <!-- Slides will be inserted here -->
+</div>
+
+<script>
+  const slides = [
+    { emoji: "👀", text: "সব মেয়ের হৃদয়ে থাকে জান্নাতে যাওয়ার এক গোপন ইচ্ছা।" },
+    { emoji: "🌙", text: "কিন্তু আমরা অনেকেই জানি না কোন সহজ কাজগুলো আমাদের জান্নাতের পথে নিয়ে যেতে পারে।" },
+    { emoji: "❤️", text: "আজ জেনে নিন সেই ৫টি কাজ – যেগুলো করলে একজন মেয়ে সহজেই জান্নাতে যেতে পারে।" },
+    { emoji: "🧕", text: "১. পর্দা রক্ষা করো — আল্লাহর আদেশ মেনে।" },
+    { emoji: "🧣", text: "পর্দা শুধু কাপড় নয়, এটা তোমার লজ্জাশীলতা ও তাকওয়ার প্রতিচ্ছবি।" },
+    { emoji: "👨‍👩‍👧", text: "২. মা-বাবার খেদমত করো — জান্নাত তাঁদের সন্তুষ্টিতেই।" },
+    { emoji: "🧎‍♀️", text: "তাদের হাসি মুখই তোমার দোয়া হওয়ার পথ খুলে দেয়।" },
+    { emoji: "💍", text: "৩. স্বামীর সন্তুষ্টি অর্জন করো — আল্লাহ এতে খুশি হন।" },
+    { emoji: "🍽️", text: "নিয়্যত থাকুক — এটা শুধু দাম্পত্য নয়, ইবাদতও বটে।" },
+    { emoji: "📿", text: "৪. নামাজ কায়েম করো — প্রতিদিন জান্নাতের দিকে এক ধাপ এগোনো।" },
+    { emoji: "🕋", text: "নামাজই প্রথম প্রশ্ন — সঠিক হলে সব সঠিক।" },
+    { emoji: "📖", text: "৫. কুরআন পড়ো, বুঝো, ও অনুসরণ করো।" },
+    { emoji: "🕊️", text: "কুরআন একজন নারীর জন্য জীবনের পূর্ণ দিকনির্দেশনা।" },
+    { emoji: "🧕➡️👩‍👧", text: "ভালো কাজ শিখে অন্য নারীদেরও শেখাও — সাওয়াবের ধারা চলবে অনন্তকাল।" },
+    { emoji: "🤲", text: "সবার আগে আল্লাহর কাছে দোয়া করো — হিদায়াত চাও প্রতিদিন।" },
+    { emoji: "🕰️", text: "একজন জান্নাতি নারী দিনের শুরু করেন ফজরের নামাজ দিয়ে।" },
+    { emoji: "🫂", text: "কাউকে কষ্ট না দিয়ে, দয়ালু মন নিয়ে চলা — জান্নাতের রাস্তা মসৃণ করে।" },
+    { emoji: "🚫", text: "গীবত, হিংসা ও অহংকার — এগুলো জান্নাতের পথে বড় বাধা।" },
+    { emoji: "📆", text: "প্রতিদিন একটু একটু করে এগিয়ে গেলেই একদিন জান্নাত কাছে আসবে।" },
+    { emoji: "🌸", text: "আল্লাহ চাইলে — তুমি জান্নাতের রানী হতে পারো। শুরু করো আজই!" }
+  ];
+
+  const slider = document.getElementById('slider');
+
+  slides.forEach((s, index) => {
+    const slide = document.createElement('div');
+    slide.classList.add('slide');
+    if (index === 0) slide.classList.add('active');
+    slide.innerHTML = `
+      <div class="left">${s.emoji}</div>
+      <div class="right">${s.text}</div>
+      <button class="next-btn" onclick="nextSlide(${index})">Next ➤</button>
+    `;
+    slider.appendChild(slide);
+  });
+
+  function nextSlide(currentIndex) {
+    const allSlides = document.querySelectorAll('.slide');
+    if (currentIndex + 1 < allSlides.length) {
+      allSlides[currentIndex].classList.remove('active');
+      allSlides[currentIndex + 1].classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>
