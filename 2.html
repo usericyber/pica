@@ -7,12 +7,13 @@
     <style>
         /* --- CSS: স্টাইল ও ডিজাইন --- */
         :root {
-            --primary-color: #007bff; /* নীল */
-            --secondary-color: #28a745; /* সবুজ */
-            --text-color: #f8f9fa; /* হালকা সাদা */
-            --bg-dark: #121212;
-            --bg-light: #1e1e1e;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary-color: #00bcd4; /* হালকা নীল/সায়ান */
+            --secondary-color: #8bc34a; /* হালকা সবুজ */
+            --text-color: #e0e0e0; /* হালকা ধূসর */
+            --bg-dark: #1a1a1a; /* গাঢ় ধূসর */
+            --bg-light: #2c2c2c; /* মাঝারি ধূসর */
+            --accent-green: #4CAF50; /* আপনার পছন্দের সবুজ */
+            --font-main: 'Arial', sans-serif; /* ফন্ট পরিবর্তন */
         }
 
         body {
@@ -36,13 +37,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: linear-gradient(0deg, transparent 95%, rgba(255, 255, 255, 0.05) 100%),
-                              linear-gradient(90deg, transparent 95%, rgba(255, 255, 255, 0.05) 100%);
+            background-image: linear-gradient(0deg, transparent 95%, rgba(0, 255, 0, 0.05) 100%),
+                              linear-gradient(90deg, transparent 95%, rgba(0, 255, 0, 0.05) 100%);
             background-size: 50px 50px;
             animation: moveGrid 60s linear infinite;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.3;
+            opacity: 0.2; /* কম অপাসিটি */
+            filter: blur(0.5px); /* হালকা ব্লার */
         }
 
         @keyframes moveGrid {
@@ -53,181 +55,173 @@
         /* মূল কন্টেইনার (16:9 রেশিও) */
         .presentation-container {
             position: relative;
-            width: 90vw; /* স্ক্রিনের প্রস্থের ৯০% */
-            max-width: 1280px; /* সর্বোচ্চ প্রস্থ */
-            aspect-ratio: 16 / 9;
-            background: var(--bg-light);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100vw; /* পুরো স্ক্রিন জুড়েই থাকবে */
+            height: 100vh;
+            /* aspect-ratio: 16 / 9; /* removed, as 100vw/100vh fills screen */
+            background: rgba(0,0,0,0.7); /* হালকা কালো স্বচ্ছ ব্যাকগ্রাউন্ড */
             overflow: hidden;
             display: flex;
             z-index: 1;
         }
 
-        /* বাম দিক: ভিডিও প্লেসহোল্ডার */
-        .video-area {
-            flex: 3; /* মোট প্রস্থের ~৭৫% */
-            background-color: rgba(0, 0, 0, 0.6);
+        /* বাম দিক: ভিডিও, ইমোটিকন, ভেক্টর ইমেজ, স্টক ফুটেজ */
+        .media-area {
+            flex: 1; /* বাম পাশের জন্য ১ ভাগ, প্রায় ৫০% */
+            background-color: var(--accent-green); /* আপনার দেওয়া সবুজ রঙ */
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            padding: 20px; /* ভেতরের কন্টেন্টের জন্য প্যাডিং */
+            box-sizing: border-box; /* প্যাডিং সহ প্রস্থ বজায় রাখবে */
         }
-
-        .video-placeholder {
+        
+        /* মিডিয়া কন্টেন্ট প্লেসহোল্ডার */
+        .media-content-placeholder {
             width: 100%;
             height: 100%;
-            background: url('video_placeholder.jpg') no-repeat center center / cover; /* ভিডিও কভার ইমেজ যোগ করুন */
+            background: var(--accent-green); /* একই সবুজ রঙ */
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            color: white;
             font-size: 2em;
-            color: var(--primary-color);
-            text-shadow: 0 0 5px #000;
-        }
-
-        /* ডান দিক: টেক্সট ও স্লাইড এলাকা */
-        .slide-area {
-            flex: 1; /* মোট প্রস্থের ~২৫% */
-            background-color: var(--bg-dark);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        /* স্লাইড কন্টেন্ট */
-        .slide-content {
-            margin-bottom: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: opacity 0.3s ease;
-        }
-
-        .slide-text {
-            font-size: 1.5em;
-            line-height: 1.6;
-            min-height: 150px;
-            overflow: hidden;
-            font-weight: 500;
-        }
-
-        .typing-cursor {
-            display: inline-block;
-            width: 4px;
-            height: 1.2em;
-            background-color: var(--secondary-color);
-            animation: blink 0.7s step-end infinite;
-            margin-left: 5px;
-            vertical-align: middle;
-        }
-
-        @keyframes blink {
-            from, to { opacity: 0; }
-            50% { opacity: 1; }
-        }
-
-        /* ইমোজি/আইকন ট্যাব */
-        .emoji-tab {
-            font-size: 4em;
             text-align: center;
-            margin-top: 10px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3); /* বর্ডার */
+            box-sizing: border-box;
+            line-height: 1.5;
+        }
+        .media-emoji {
+            font-size: 6em; /* ইমোজির আকার বৃদ্ধি */
+            margin-bottom: 20px;
             transition: transform 0.3s ease;
             will-change: transform;
+            animation: pulse-emoji 1s infinite alternate; /* ইমোজি পালস অ্যানিমেশন */
         }
-        .emoji-tab.animated {
-            animation: pulse 1s infinite alternate;
-        }
-        @keyframes pulse {
+        @keyframes pulse-emoji {
             from { transform: scale(1); opacity: 1; }
             to { transform: scale(1.05); opacity: 0.9; }
         }
 
-        /* নেভিগেশন বাটন */
-        .navigation-controls {
+        /* ডান দিক: টেক্সট এলাকা */
+        .text-area {
+            flex: 1; /* ডান পাশের জন্য ১ ভাগ, প্রায় ৫০% */
+            background-color: rgba(0, 0, 0, 0.4); /* হালকা স্বচ্ছ কালো */
+            padding: 50px; /* প্যাডিং বৃদ্ধি */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* স্লাইড কন্টেন্ট */
+        .slide-content {
+            width: 100%;
+            max-width: 800px; /* টেক্সটের সর্বোচ্চ প্রস্থ */
+            text-align: center;
+            transition: opacity 0.5s ease-in-out; /* স্লাইড ট্রানজিশন স্মুথ করার জন্য */
+        }
+
+        .slide-text {
+            font-size: 3em; /* ফন্ট সাইজ আরও বড় */
+            line-height: 1.4;
+            min-height: 200px; /* ন্যূনতম উচ্চতা */
+            color: var(--text-color);
+            font-weight: bold; /* টেক্সট বোল্ড */
+            overflow: hidden; /* অতিরিক্ত টেক্সট লুকানোর জন্য */
+            text-shadow: 0 0 10px rgba(0,255,0,0.3); /* হালকা টেক্সট শ্যাডো */
+        }
+        
+        /* নেভিগেশন ও স্লাইড কাউন্টার */
+        .bottom-controls {
+            position: absolute;
+            bottom: 20px;
+            width: 90%;
             display: flex;
             justify-content: space-between;
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            padding: 0 50px; /* টেক্সট এরিয়ার প্যাডিং এর সাথে মিলিয়ে */
+            box-sizing: border-box;
+            z-index: 2; /* স্লাইড কন্টেন্টের উপরে */
         }
 
         .nav-button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 25px; /* বাটনের প্যাডিং বৃদ্ধি */
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1.1em;
             transition: background-color 0.3s, transform 0.1s;
             font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
         .nav-button:hover {
-            background-color: #0056b3;
+            background-color: #0097a7; /* হালকা গাঢ় */
             transform: translateY(-2px);
         }
 
         .nav-button:disabled {
-            background-color: #343a40;
+            background-color: #546e7a; /* গাঢ় ধূসর */
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.7;
             transform: none;
+            box-shadow: none;
         }
 
-        /* বর্তমান স্লাইড ট্র্যাকার */
         .slide-tracker {
-            text-align: center;
-            padding: 10px 0;
             color: var(--secondary-color);
+            font-size: 1.2em;
             font-weight: bold;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
-        /* রেসপন্সিভনেস (ছোট পর্দার জন্য - যদিও এটি 16:9 প্রেজেন্টেশন) */
-        @media (max-width: 1000px) {
-            .slide-text {
-                font-size: 1.3em;
-            }
-        }
+        /* শুধু ভিডিও স্ক্রিনে স্লাইড কাউন্ট না থাকার জন্য, এটি মূল প্রেজেন্টেশন কন্টেইনারের বাইরে রাখা হবে */
+
+        /* টাইপিং কার্সার বাদ দেওয়া হয়েছে */
+        /* @keyframes blink removed */
+
     </style>
 </head>
 <body>
 
     <div class="grid-background"></div>
 
-    <div class="presentation-container">
+    <div class="presentation-container" id="presentationContainer">
         
-        <div class="video-area">
-            <div class="video-placeholder">
-                এখানে আপনার ভিডিও প্লেয়ার বা ভিডিও কভার যোগ করুন
+        <div class="media-area">
+            <div class="media-content-placeholder">
+                <div id="mediaEmoji" class="media-emoji">🌟</div>
+                <div id="mediaPlaceholderText" style="font-size: 0.6em;">
+                    ভিডিও, ইমোটিকন, ভেক্টর ইমেজ, স্টক ফুটেজ এখানে
+                </div>
             </div>
         </div>
 
-        <div class="slide-area">
-            <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 20px;">জান্নাতের সহজ পথ</h2>
-            
+        <div class="text-area">
             <div class="slide-content" id="slideContent">
-                <div class="emoji-tab" id="emojiTab">🌟</div>
                 <div class="slide-text" id="typingText"></div>
             </div>
+        </div>
 
+        <div class="bottom-controls">
+            <button class="nav-button" id="prevBtn" disabled>পূর্ববর্তী</button>
             <div class="slide-tracker">
                 স্লাইড <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">20</span>
             </div>
-
-            <div class="navigation-controls">
-                <button class="nav-button" id="prevBtn" disabled>পূর্ববর্তী</button>
-                <button class="nav-button" id="nextBtn">পরবর্তী</button>
-            </div>
+            <button class="nav-button" id="nextBtn">পরবর্তী</button>
         </div>
     </div>
 
     <script>
         const slides = [
-            { text: "ভিডিও টাইটেল: মেয়েদের জান্নাতে যাওয়ার জন্য সহজ ৫ টি কাজ", emoji: "🌟" },
+            { text: "ভিডিও টাইটেল: মেয়েদের জান্নাতের যাওয়ার জন্য সহজ ৫ টি কাজ", emoji: "🌟" },
             { text: "আসসালামু আলাইকুম। জান্নাত—আমাদের চিরন্তন ঠিকানা, শান্তির স্থান।", emoji: "🙏" },
             { text: "আল্লাহ্‌র পথে জান্নাতের দরজা আমাদের জন্য সহজ করে রেখেছেন।", emoji: "🚪" },
             { text: "চলুন, জেনে নিই সেই ৫টি সহজ ও মূল্যবান কাজ কী কী।", emoji: "📝" },
@@ -250,57 +244,61 @@
         ];
 
         let currentSlide = 0;
+        let isTyping = false; // টাইপিং চলাকালীন ডুপ্লিকেট এন্টার প্রতিরোধ
         const typingTextElement = document.getElementById('typingText');
-        const emojiTabElement = document.getElementById('emojiTab');
+        const mediaEmojiElement = document.getElementById('mediaEmoji'); // ইমোজির জন্য নতুন আইডি
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const currentSlideNum = document.getElementById('currentSlideNum');
         const totalSlidesNum = document.getElementById('totalSlidesNum');
+        const slideContentContainer = document.getElementById('slideContent');
         
         totalSlidesNum.textContent = slides.length;
 
         // টাইপিং অ্যানিমেশন ফাংশন
         function typeWriter(text, i, fnCallback) {
+            isTyping = true;
             if (i < text.length) {
-                typingTextElement.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                typingTextElement.innerHTML = text.substring(0, i + 1);
                 setTimeout(function() {
                     typeWriter(text, i + 1, fnCallback);
                 }, 30); // টাইপিং গতি
             } else if (typeof fnCallback == 'function') {
-                typingTextElement.innerHTML = text + '<span class="typing-cursor" style="opacity: 0;"></span>';
-                setTimeout(fnCallback, 700);
+                typingTextElement.innerHTML = text; // কার্সার অপসারণ
+                isTyping = false;
+                setTimeout(fnCallback, 500); // টাইপিং শেষ হওয়ার পর সামান্য বিরতি
             }
         }
 
         // স্লাইড পরিবর্তন ফাংশন
         function changeSlide(index) {
-            if (index < 0 || index >= slides.length) return;
+            if (isTyping || index < 0 || index >= slides.length) return;
 
             currentSlide = index;
             const slide = slides[currentSlide];
 
             // স্লাইড ট্রানজিশন (অপাসিটি)
-            const slideContent = document.getElementById('slideContent');
-            slideContent.style.opacity = 0;
+            slideContentContainer.style.opacity = 0;
 
             setTimeout(() => {
                 // টেক্সট রিসেট
                 typingTextElement.innerHTML = ''; 
                 
                 // ইমোজি আপডেট ও অ্যানিমেশন
-                emojiTabElement.textContent = slide.emoji;
-                emojiTabElement.classList.add('animated');
-                setTimeout(() => emojiTabElement.classList.remove('animated'), 1500); // ইমোজি পালস
-
+                mediaEmojiElement.textContent = slide.emoji;
+                // পালস অ্যানিমেশন পুনরায় শুরু করার জন্য ক্লাস টগল
+                mediaEmojiElement.classList.remove('animated'); 
+                void mediaEmojiElement.offsetWidth; // রিফ্লো ট্রিগার
+                mediaEmojiElement.classList.add('animated'); 
+                
                 // টাইপিং শুরু
                 typeWriter(slide.text, 0, function() {
-                    // টাইপিং শেষ হওয়ার পর নেভিগেশন আপডেট
                     updateNavigation();
                 });
 
                 // অপাসিটি ফিরিয়ে আনা
-                slideContent.style.opacity = 1;
-            }, 300);
+                slideContentContainer.style.opacity = 1;
+            }, 500); // ট্রানজিশনের সময়
 
             // স্লাইড নম্বর আপডেট
             currentSlideNum.textContent = currentSlide + 1;
@@ -316,8 +314,28 @@
         prevBtn.addEventListener('click', () => changeSlide(currentSlide - 1));
         nextBtn.addEventListener('click', () => changeSlide(currentSlide + 1));
 
+        // এন্টার কী প্রেস করলে পরবর্তী স্লাইডে যাওয়ার জন্য ইভেন্ট লিসেনার
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // ডিফল্ট এন্টার আচরণ (যেমন ফর্ম সাবমিট) বন্ধ করে
+                if (!isTyping && currentSlide < slides.length - 1) {
+                    changeSlide(currentSlide + 1);
+                } else if (isTyping) {
+                    // টাইপিং চলাকালীন এন্টার চাপলে পুরো টেক্সট একবারে দেখাবে
+                    typingTextElement.innerHTML = slides[currentSlide].text;
+                    isTyping = false;
+                    updateNavigation();
+                }
+            } else if (event.key === 'Backspace' && !isTyping && currentSlide > 0) {
+                 event.preventDefault(); // ডিফল্ট ব্যাকস্পেস আচরণ বন্ধ করে
+                 changeSlide(currentSlide - 1);
+            }
+        });
+
+
         // প্রথম স্লাইড লোড করা
         changeSlide(0);
+        updateNavigation(); // প্রাথমিক বাটন অবস্থা সেট করতে
 
     </script>
 </body>
