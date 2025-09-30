@@ -33,49 +33,56 @@
   <button onclick="generateScript()">Generate Script</button>
   <pre id="output"></pre>
 
-  <script>
-    const API_KEY = "AIzaSyBZ2ph3AmfUZldr1_76rj3O3CoPK2XeEpc"; // Replace with your real key
+<script>
+  const API_KEY = "AIzaSyBZ2ph3AmfUZldr1_76rj3O3CoPK2XeEpc"; // Replace with your actual key
 
-    async function generateScript() {
-      const title = document.getElementById("titleInput").value;
-      const output = document.getElementById("output");
-      output.textContent = "Generating...";
+  async function generateScript() {
+    const title = document.getElementById("titleInput").value;
+    const output = document.getElementById("output");
+    output.textContent = "Generating...";
 
-      const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 
-      const requestBody = {
-        contents: [
-          {
-            parts: [
-              {
-                text: `Write a detailed script based on this title: "${title}".`
-              }
-            ]
-          }
-        ]
-      };
-
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(requestBody)
-        });
-
-        const data = await res.json();
-
-        if (data.candidates && data.candidates.length > 0) {
-          output.textContent = data.candidates[0].content.parts[0].text;
-        } else {
-          output.textContent = "No script generated.";
+    const requestBody = {
+      contents: [
+        {
+          parts: [
+            {
+              text: `Write a detailed movie script based on this title: "${title}"`
+            }
+          ]
         }
+      ]
+    };
 
-      } catch (err) {
-        output.textContent = "Error: " + err.message;
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      const data = await res.json();
+      console.log("Full API response:", data); // 👈 See exactly what comes back
+
+      // Safely access the generated text
+      const generatedText =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+
+      if (generatedText) {
+        output.textContent = generatedText;
+      } else {
+        output.textContent = "No script generated.\n\nCheck the browser console (F12) to see the API response.";
       }
+
+    } catch (err) {
+      output.textContent = "Error: " + err.message;
+      console.error("Fetch error:", err);
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
