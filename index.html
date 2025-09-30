@@ -1,165 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Script Generator (Secure Proxy)</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 800px;
-        }
-        h1 {
-            color: #4CAF50;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        button:disabled {
-            background-color: #a0a0a0;
-            cursor: not-allowed;
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            resize: vertical;
-            min-height: 300px;
-        }
-        #output-area {
-            margin-top: 20px;
-        }
-        .note {
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #777;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Gemini Script Generator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f4f4f4;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+      width: 60%;
+    }
+    pre {
+      text-align: left;
+      white-space: pre-wrap;
+      margin-top: 20px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
+  <h1>🎬 Gemini Script Generator</h1>
+  <input type="text" id="titleInput" placeholder="Enter a script title"/>
+  <br/>
+  <button onclick="generateScript()">Generate Script</button>
+  <pre id="output"></pre>
 
-    <div class="container">
-        <h1>AI Video Script Generator</h1>
+  <script>
+    const API_KEY = "AIzaSyBZ2ph3AmfUZldr1_76rj3O3CoPK2XeEpc"; // Replace with your real key
 
-        <div class="input-group">
-            <label for="titleInput">Video Topic or Title:</label>
-            <input type="text" id="titleInput" placeholder="E.g., The Future of Quantum Computing" required>
-        </div>
+    async function generateScript() {
+      const title = document.getElementById("titleInput").value;
+      const output = document.getElementById("output");
+      output.textContent = "Generating...";
 
-        <button id="generateButton" onclick="generateScript()">Generate Script</button>
+      const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY;
 
-        <div id="output-area">
-            <label for="scriptOutput">Generated Script:</label>
-            <textarea id="scriptOutput" placeholder="The AI-generated script will appear here..." readonly></textarea>
-        </div>
-        
-        <p class="note">
-            Your **Gemini API Key is kept secure** on a serverless function (proxy) and is **never exposed** in this public GitHub Page code.
-            <br>
-            ***Replace `YOUR_SERVERLESS_PROXY_URL_HERE` in the script with your actual proxy URL.***
-        </p>
+      const requestBody = {
+        contents: [
+          {
+            parts: [
+              {
+                text: `Write a detailed script based on this title: "${title}".`
+              }
+            ]
+          }
+        ]
+      };
 
-    </div>
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(requestBody)
+        });
 
-    <script>
-        // *** IMPORTANT: You MUST replace this with the URL of your deployed Cloudflare Worker or Netlify Function. ***
-        const PROXY_ENDPOINT_URL = "YOUR_SERVERLESS_PROXY_URL_HERE"; 
-        
-        const titleInput = document.getElementById('titleInput');
-        const generateButton = document.getElementById('generateButton');
-        const scriptOutput = document.getElementById('scriptOutput');
+        const data = await res.json();
 
-        async function generateScript() {
-            const videoTitle = titleInput.value.trim();
-
-            if (!videoTitle) {
-                alert("Please enter a video topic or title.");
-                return;
-            }
-
-            if (PROXY_ENDPOINT_URL === "YOUR_SERVERLESS_PROXY_URL_HERE") {
-                scriptOutput.value = "ERROR: Please replace 'YOUR_SERVERLESS_PROXY_URL_HERE' in the script with your actual deployed Worker/Function URL.";
-                return;
-            }
-
-            // 1. Disable button and show loading state
-            generateButton.disabled = true;
-            generateButton.textContent = "Generating... Please wait (up to 30s)";
-            scriptOutput.value = "Sending request to the secure proxy...";
-
-            try {
-                // 2. Call the secure proxy endpoint, sending only the user's input
-                const response = await fetch(PROXY_ENDPOINT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    // Send the title inside a JSON body
-                    body: JSON.stringify({ videoTitle: videoTitle })
-                });
-
-                // 3. Handle the response from the proxy
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Proxy error: ${response.status} ${response.statusText}. Response: ${errorText}`);
-                }
-
-                // 4. Get the generated script text
-                const script = await response.text();
-                scriptOutput.value = script;
-
-            } catch (error) {
-                console.error("Fetch error:", error);
-                scriptOutput.value = `An error occurred while generating the script. Please check the console for details. Error: ${error.message}`;
-            } finally {
-                // 5. Re-enable button
-                generateButton.disabled = false;
-                generateButton.textContent = "Generate Script";
-            }
+        if (data.candidates && data.candidates.length > 0) {
+          output.textContent = data.candidates[0].content.parts[0].text;
+        } else {
+          output.textContent = "No script generated.";
         }
-    </script>
+
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+      }
+    }
+  </script>
 </body>
 </html>
