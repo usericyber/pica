@@ -64,7 +64,7 @@
             z-index: 1;
         }
 
-        /* বাম দিক: ভিডিও প্লেসহোল্ডার */
+        /* বাম দিক: ভিডিও প্লেসহোল্ডার - এখানে আপনার ভিডিও চলবে */
         .video-area {
             flex: 3;
             background-color: rgba(0, 0, 0, 0.6);
@@ -77,7 +77,6 @@
         .video-placeholder {
             width: 100%;
             height: 100%;
-            /* Note: Background image is now dynamic via JS for visual cue */
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
@@ -98,6 +97,8 @@
             padding: 10px;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 5px;
+            /* Added visual emphasis for the suggestion text in the video placeholder */
+            z-index: 10; 
         }
 
         /* ডান দিক: টেক্সট ও স্লাইড এলাকা */
@@ -136,22 +137,16 @@
             transition: transform 0.3s ease;
             will-change: transform;
         }
+        /* Continuous pulse animation */
         .emoji-tab.animated {
-            animation: pulse 1s infinite alternate;
+            animation: pulse 1s infinite alternate; /* Runs indefinitely */
         }
         @keyframes pulse {
             from { transform: scale(1); opacity: 1; }
             to { transform: scale(1.05); opacity: 0.9; }
         }
 
-        /* Removed all navigation-related CSS */
-
-        /* রেসপন্সিভনেস */
-        @media (max-width: 1000px) {
-            .slide-text {
-                font-size: 1.3em;
-            }
-        }
+        /* Removed all navigation-related CSS (buttons, tracker) */
     </style>
 </head>
 <body>
@@ -169,7 +164,7 @@
 
         <div class="slide-area">
             <div class="slide-content" id="slideContent">
-                <div class="emoji-tab" id="emojiTab">🌟</div>
+                <div class="emoji-tab animated" id="emojiTab">🌟</div>
                 <div class="slide-text" id="typingText"></div>
             </div>
 
@@ -177,7 +172,7 @@
     </div>
 
     <script>
-        // Data Structure for Slides: text, emoji, and visual suggestion
+        // Data Structure for Slides
         const slides = [
             { text: "আসসালামু আলাইকুম! 🌸\n\nআশা করি আল্লাহর রহমতে সবাই ভালো আছেন।", emoji: "🌸", visual: "শান্ত একটি নেচার ব্যাকগ্রাউন্ড, সূর্যোদয় বা ফুলের ছবি। (Stock: Sunrise over a garden, soft light.)" },
             { text: "আজ আমরা মেয়েদের জন্য জান্নাতে যাওয়ার ৫টি সহজ কিন্তু গুরুত্বপূর্ণ কাজ নিয়ে আলোচনা করব। ✨", emoji: "✨", visual: "মুসলিম মহিলাদের শান্তিপূর্ণ ব্যাকগ্রাউন্ড। (Stock: Muslim woman smiling with nature background.)" },
@@ -212,7 +207,7 @@
             isTyping = true;
             
             if (i < text.length) {
-                typingTextElement.innerHTML = text.substring(0, i + 1).replace(/\n/g, '<br>'); // Newline support
+                typingTextElement.innerHTML = text.substring(0, i + 1).replace(/\n/g, '<br>');
                 setTimeout(function() {
                     typeWriter(text, i + 1, fnCallback);
                 }, 30);
@@ -236,26 +231,31 @@
             setTimeout(() => {
                 typingTextElement.innerHTML = ''; 
                 
-                // Update Emoji and Animation
+                // Update Emoji. We keep the 'animated' class permanently via HTML.
                 emojiTabElement.textContent = slide.emoji;
-                emojiTabElement.classList.add('animated');
-                setTimeout(() => emojiTabElement.classList.remove('animated'), 1500);
 
                 // Update Visual Suggestion in the video area
                 visualSuggestionElement.innerHTML = "ফুটেজ: " + slide.visual;
 
                 // Start Typing
                 typeWriter(slide.text, 0, function() {
-                    // Automatically proceed to the next slide after typing is finished
-                    // 4 seconds delay to allow time for reading/video synchronization
-                    setTimeout(() => {
-                        changeSlide(currentSlide + 1);
-                    }, 4000); 
+                    // Typing done. Awaiting user input (Enter key)
                 });
 
                 slideContent.style.opacity = 1;
             }, 300);
         }
+
+        // এন্টার (Enter) কী চাপলে স্লাইড পরিবর্তনের জন্য লিসেনার
+        document.addEventListener('keydown', (event) => {
+            // Check if it's the Enter key and if typing is finished
+            if (event.key === 'Enter' && !isTyping) {
+                event.preventDefault(); // Prevent default browser actions (like scrolling or form submission)
+                
+                // Advance to the next slide
+                changeSlide(currentSlide + 1);
+            }
+        });
 
         // প্রথম স্লাইড লোড করা
         changeSlide(0);
